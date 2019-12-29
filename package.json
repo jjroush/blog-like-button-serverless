@@ -1,0 +1,25 @@
+{
+  "name": "blog-like-button-serverless",
+  "version": "1.0.0",
+  "description": "Adds post like functionality to static blog with the powers of GCP and the serverless framework.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjroush/blog-like-button-serverless.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjroush/blog-like-button-serverless/issues"
+  },
+  "homepage": "https://github.com/jjroush/blog-like-button-serverless#readme",
+  "devDependencies": {
+    "serverless-google-cloudfunctions": "^2.3.3"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^3.1.0"
+  }
+}

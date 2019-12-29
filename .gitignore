@@ -1,0 +1,10 @@
+# package directories
+node_modules
+
+# Serverless directories
+.serverless
+service-account.json
+#config
+config.json
+
+.DS_Store

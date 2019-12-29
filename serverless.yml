@@ -1,0 +1,31 @@
+service: blog-like-button
+
+provider:
+  name: google
+  runtime: nodejs10
+  region: us-central1
+  memorySize: 256
+  timeout: 30s
+  project: roushio
+  credentials: ~/.gcloud/serverless-roushio-deploy.json
+
+plugins:
+  - serverless-google-cloudfunctions
+
+package:
+  exclude:
+    - node_modules/**
+    - .gitignore
+    - .git/**
+
+functions:
+  addLike:
+    handler: addLike
+    events:
+      - http: addLike
+        method: post
+  getLikes:
+    handler: getLikes
+    events:
+      - http: getLike
+        method: get
