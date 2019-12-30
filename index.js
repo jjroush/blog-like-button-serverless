@@ -7,13 +7,11 @@ const firestore = new Firestore({
 
 exports.addLike = (request, response) => {
     response.set('Access-Control-Allow-Origin', "*");
-    const articleRef = firestore.doc('articles/a article with spaces');
+    const article = request.query.article;
+    const articleRef = firestore.doc(`articles/${article}`);
     articleRef.get()
         .then(doc => {
             if (!doc.exists) {
-                articleRef.add({ Likes: 1 }).then(documentReference => {
-                    console.log(`Added document with name: ${documentReference.id}`);
-                });
                 response.status(500).send('doesn\'t exist');
             } else {
                 articleRef.update('Likes', Firestore.FieldValue.increment(1));
@@ -27,13 +25,17 @@ exports.addLike = (request, response) => {
 };
 
 exports.getLikes = (request, response) => {
+    const article = request.query.article;
+    console.log(request.query)
     response.set('Access-Control-Allow-Origin', "*");
-    console.log(request);
-    const articleRef = firestore.doc('articles/test');
+    const articleRef = firestore.doc(`articles/${article}`);
     articleRef.get()
         .then(doc => {
             if (!doc.exists) {
                 console.log('Creating new article');
+                firestore.collection('articles').doc(article).set({ Likes: 1 }).then(documentReference => {
+                    response.status(200).send(doc.data());
+                });
             } else {
                 response.status(200).send(doc.data());
             }
