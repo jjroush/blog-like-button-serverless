@@ -25,23 +25,39 @@ exports.addLike = (request, response) => {
 };
 
 exports.getLikes = (request, response) => {
-    const article = request.query.article;
-    console.log(request.query)
     response.set('Access-Control-Allow-Origin', "*");
-    const articleRef = firestore.doc(`articles/${article}`);
-    articleRef.get()
-        .then(doc => {
-            if (!doc.exists) {
-                console.log('Creating new article');
-                firestore.collection('articles').doc(article).set({ Likes: 1 }).then(documentReference => {
+    if (request.query.article) {
+        const article = request.query.article;
+        console.log(request.query)
+        const articleRef = firestore.doc(`articles/${article}`);
+        articleRef.get()
+            .then(doc => {
+                if (!doc.exists) {
+                    console.log('Creating new article');
+                    firestore.collection('articles').doc(article).set({ Likes: 1 }).then(documentReference => {
+                        response.status(200).send(doc.data());
+                    });
+                } else {
                     response.status(200).send(doc.data());
+                }
+            })
+            .catch(err => {
+                console.log('Error getting document', err);
+                response.status(500).send('Error');
+            });
+    } else {
+        const articleColRef = firestore.collection('articles');
+        let articles = {};
+        articleColRef.get()
+            .then(docs => {
+                docs.forEach(doc => {
+                    articles[doc.id] = doc.data();
                 });
-            } else {
-                response.status(200).send(doc.data());
-            }
-        })
-        .catch(err => {
-            console.log('Error getting document', err);
-            response.status(500).send('Error');
-        });
+                response.status(200).send(articles);
+            })
+            .catch(err => {
+                console.log('Error getting all documents', err);
+                response.status(500).send('Error');
+            });
+    }
 };
